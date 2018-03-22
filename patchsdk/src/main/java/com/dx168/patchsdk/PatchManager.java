@@ -69,7 +69,7 @@ public final class PatchManager {
     private AppInfo appInfo;
     private IPatchManager actualManager;
 
-    public void init(Context context, String baseUrl, String appId, String appSecret, IPatchManager actualManager) {
+    public void init(Context context, String baseUrl, String publicKey, String appSecret, IPatchManager actualManager) {
         this.context = context;
         this.actualManager = actualManager;
         if (!PatchUtils.isMainProcess(context)) {
@@ -77,10 +77,10 @@ public final class PatchManager {
         }
         SPUtils.put(context, KEY_STAGE, STAGE_IDLE);
         appInfo = new AppInfo();
-        appInfo.setAppId(appId);
+        appInfo.setPublicKey(publicKey);
         appInfo.setAppSecret(appSecret);
-        appInfo.setToken(DigestUtils.md5DigestAsHex(appId + "_" + appSecret));
-        appInfo.setDeviceId(PatchUtils.getDeviceId(context));
+        appInfo.setToken(DigestUtils.md5DigestAsHex(publicKey + "_" + appSecret));
+//        appInfo.setDeviceId(PatchUtils.getDeviceId(context));
         appInfo.setPackageName(context.getPackageName());
         PackageManager packageManager = context.getPackageManager();
         try {
@@ -183,10 +183,8 @@ public final class PatchManager {
             return;
         }
         PatchServer.get()
-                .queryPatch(appInfo.getAppId(), appInfo.getToken(), appInfo.getTag(),
-                        appInfo.getVersionName(), appInfo.getVersionCode(), appInfo.getPlatform(),
-                        appInfo.getOsVersion(), appInfo.getModel(), appInfo.getChannel(),
-                        appInfo.getSdkVersion(), appInfo.getDeviceId(), new PatchServer.PatchServerCallback() {
+                .queryPatch(appInfo.getPublicKey(), appInfo.getToken(),
+                        appInfo.getVersionName(), appInfo.getChannel(), new PatchServer.PatchServerCallback() {
                             @Override
                             public void onSuccess(int code, byte[] bytes) {
                                 if (bytes == null) {
@@ -349,7 +347,7 @@ public final class PatchManager {
         if (bytes == null || bytes.length == 0) {
             return false;
         }
-        String downloadFileHash = DigestUtils.md5DigestAsHex(appInfo.getAppId() + "_" + appInfo.getAppSecret() + "_" + DigestUtils.md5DigestAsHex(bytes));
+        String downloadFileHash = DigestUtils.md5DigestAsHex(appInfo.getPublicKey() + "_" + appInfo.getAppSecret() + "_" + DigestUtils.md5DigestAsHex(bytes));
         return TextUtils.equals(downloadFileHash, hash);
     }
 
@@ -361,7 +359,7 @@ public final class PatchManager {
         return data.getPatchVersion() + "_" + data.getId() + ".apk";
     }
 
-    private String getUid(String patchPath) {
+    private String getPatchId(String patchPath) {
         return patchPath.substring(patchPath.lastIndexOf("_") + 1, patchPath.length() - 4);
     }
 
@@ -510,10 +508,8 @@ public final class PatchManager {
             return;
         }
         PatchServer.get()
-                .report(appInfo.getAppId(), appInfo.getToken(), appInfo.getTag(),
-                        appInfo.getVersionName(), appInfo.getVersionCode(), appInfo.getPlatform(),
-                        appInfo.getOsVersion(), appInfo.getModel(), appInfo.getChannel(),
-                        appInfo.getSdkVersion(), appInfo.getDeviceId(), getUid(patchPath),
+                .report(appInfo.getPublicKey(), appInfo.getToken(),
+                        appInfo.getVersionName(), getPatchId(patchPath),
                         result, new PatchServer.PatchServerCallback() {
                             @Override
                             public void onSuccess(int code, byte[] bytes) {

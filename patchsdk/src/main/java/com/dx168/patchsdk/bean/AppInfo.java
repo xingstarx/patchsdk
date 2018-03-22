@@ -9,7 +9,7 @@ import com.dx168.patchsdk.BuildConfig;
  */
 public class AppInfo {
 
-    private String appId;
+    private String publicKey;
     private String appSecret;
     private String token;
     private String tag;
@@ -45,14 +45,6 @@ public class AppInfo {
 
     public void setVersionCode(int versionCode) {
         this.versionCode = versionCode;
-    }
-
-    public String getAppId() {
-        return appId;
-    }
-
-    public void setAppId(String appId) {
-        this.appId = appId;
     }
 
     public String getToken() {
@@ -109,5 +101,13 @@ public class AppInfo {
 
     public void setPackageName(String packageName) {
         this.packageName = packageName;
+    }
+
+    public String getPublicKey() {
+        return publicKey;
+    }
+
+    public void setPublicKey(String publicKey) {
+        this.publicKey = publicKey;
     }
 }
