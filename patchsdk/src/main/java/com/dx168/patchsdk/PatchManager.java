@@ -358,7 +358,7 @@ public final class PatchManager {
     }
 
     private String getPatchName(PatchInfo.Data data) {
-        return data.getPatchVersion() + "_" + data.getUid() + ".apk";
+        return data.getPatchVersion() + "_" + data.getId() + ".apk";
     }
 
     private String getUid(String patchPath) {

@@ -198,7 +198,7 @@ public class PatchUtils {
             if (dataJSONObject != null) {
                 PatchInfo.Data data = new PatchInfo.Data();
                 data.setVersionName(dataJSONObject.optString("versionName"));
-                data.setUid(dataJSONObject.optString("uid"));
+                data.setId(dataJSONObject.optString("id"));
                 data.setPatchVersion(dataJSONObject.optString("patchVersion"));
                 data.setDownloadUrl(dataJSONObject.optString("downloadUrl"));
                 data.setPatchSize(dataJSONObject.optLong("patchSize"));

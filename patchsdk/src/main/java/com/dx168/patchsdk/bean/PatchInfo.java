@@ -36,7 +36,7 @@ public class PatchInfo {
     public static class Data {
 
         private String versionName;
-        private String uid;
+        private String id;
         private String patchVersion;
         private String downloadUrl;
         private long patchSize;
@@ -84,14 +84,6 @@ public class PatchInfo {
             this.hash = hash;
         }
 
-        public String getUid() {
-            return uid;
-        }
-
-        public void setUid(String uid) {
-            this.uid = uid;
-        }
-
         public String getHashJiagu() {
             return hashJiagu;
         }
@@ -110,7 +102,15 @@ public class PatchInfo {
 
         @Override
         public String toString() {
-            return "{patchVersion:" + patchVersion + ", patchSize:" + patchSize + ", downloadUrl:" + downloadUrl + ", hash:" + hash + ", downloadUrlJiagu:" + downloadUrlJiagu + ", hashJiagu:" + hashJiagu + ", uid:" + uid + "}";
+            return "{patchVersion:" + patchVersion + ", patchSize:" + patchSize + ", downloadUrl:" + downloadUrl + ", hash:" + hash + ", downloadUrlJiagu:" + downloadUrlJiagu + ", hashJiagu:" + hashJiagu + ", id:" + id + "}";
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
         }
     }
 
