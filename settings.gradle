@@ -1,3 +1,1 @@
-rootProject.name = 'com.dx168.patchsdk'
-
 include ':patchsdk', ':patchtool', 'sample'
