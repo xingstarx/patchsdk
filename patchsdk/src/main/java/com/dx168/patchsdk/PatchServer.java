@@ -48,45 +48,26 @@ class PatchServer {
         return instance;
     }
 
-    public void queryPatch(String appId, String token, String tag,
-                           String versionName, int versionCode, String platform,
-                           String osVersion, String model, String channel,
-                           String sdkVersion, String deviceId,
+    public void queryPatch(String publicKey, String token,
+                           String versionName, String channel,
                            PatchServerCallback callback) {
         Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("appUid", appId);
+        paramMap.put("publicKey", publicKey);
         paramMap.put("token", token);
-        paramMap.put("tag", tag);
         paramMap.put("versionName", versionName);
-        paramMap.put("versionCode", versionCode);
-        paramMap.put("platform", platform);
-        paramMap.put("osVersion", osVersion);
-        paramMap.put("model", model);
         paramMap.put("channel", channel);
-        paramMap.put("sdkVersion", sdkVersion);
-        paramMap.put("deviceId", deviceId);
         request(baseUrl + "api/patch", paramMap, callback);
     }
 
-    public void report(String appId, String token, String tag,
-                       String versionName, int versionCode, String platform,
-                       String osVersion, String model, String channel,
-                       String sdkVersion, String deviceId, String patchUid,
+    public void report(String publicKey, String token,
+                       String versionName, String patchId,
                        boolean applyResult,
                        PatchServerCallback callback) {
         Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("appUid", appId);
+        paramMap.put("publicKey", publicKey);
         paramMap.put("token", token);
-        paramMap.put("tag", tag);
         paramMap.put("versionName", versionName);
-        paramMap.put("versionCode", versionCode);
-        paramMap.put("platform", platform);
-        paramMap.put("osVersion", osVersion);
-        paramMap.put("model", model);
-        paramMap.put("channel", channel);
-        paramMap.put("sdkVersion", sdkVersion);
-        paramMap.put("deviceId", deviceId);
-        paramMap.put("patchUid", patchUid);
+        paramMap.put("patchId", patchId);
         paramMap.put("applyResult", applyResult);
         request(baseUrl + "api/report", paramMap, callback);
     }
