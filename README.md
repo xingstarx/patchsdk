@@ -7,16 +7,11 @@ app/build.gradle 配置，参考官方 sample，也可以参考SDK里的 sample
 
 - 1. app/build.gradle
 
-````
-repositories {
-    jcenter()
-}
+```
+compile 'com.github.xingstarx:patchsdk:master-SNAPSHOT'
 
-dependencies {
-    ...
-    compile 'com.dx168.patchsdk:patchsdk:1.1.4'
-}
-````
+maven { url 'https://jitpack.io' }
+```
 
 - 2. ApplicationLike
 
