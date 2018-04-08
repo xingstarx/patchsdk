@@ -184,7 +184,7 @@ public final class PatchManager {
         }
         PatchServer.get()
                 .queryPatch(appInfo.getPublicKey(), appInfo.getToken(),
-                        appInfo.getVersionName(), appInfo.getChannel(), new PatchServer.PatchServerCallback() {
+                        appInfo.getVersionName(), appInfo.getVersionCode(), appInfo.getChannel(), new PatchServer.PatchServerCallback() {
                             @Override
                             public void onSuccess(int code, byte[] bytes) {
                                 if (bytes == null) {

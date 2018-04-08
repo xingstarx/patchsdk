@@ -49,14 +49,15 @@ class PatchServer {
     }
 
     public void queryPatch(String publicKey, String token,
-                           String versionName, String channel,
+                           String versionName, int versionCode, String channel,
                            PatchServerCallback callback) {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("publicKey", publicKey);
         paramMap.put("token", token);
         paramMap.put("versionName", versionName);
+        paramMap.put("versionCode", versionCode);
         paramMap.put("channel", channel);
-        request(baseUrl + "api/patch", paramMap, callback);
+        request(baseUrl + "tinker/info", paramMap, callback);
     }
 
     public void report(String publicKey, String token,
@@ -69,7 +70,7 @@ class PatchServer {
         paramMap.put("versionName", versionName);
         paramMap.put("patchId", patchId);
         paramMap.put("applyResult", applyResult);
-        request(baseUrl + "api/report", paramMap, callback);
+        request(baseUrl + "tinker/report", paramMap, callback);
     }
 
     public void downloadPatch(String url, PatchServerCallback callback) {
