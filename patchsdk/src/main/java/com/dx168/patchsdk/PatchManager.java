@@ -14,6 +14,9 @@ import com.dx168.patchsdk.utils.DebugUtils;
 import com.dx168.patchsdk.utils.DigestUtils;
 import com.dx168.patchsdk.utils.PatchUtils;
 import com.dx168.patchsdk.utils.SPUtils;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -195,33 +198,34 @@ public final class PatchManager {
                                     return;
                                 }
                                 String response = new String(bytes);
-                                PatchInfo patchInfo = PatchUtils.toPatchInfo(response);
-                                if (patchInfo == null) {
+
+                                JsonObject jsonObject = new JsonParser().parse(response).getAsJsonObject();
+                                if (jsonObject.get("statusCode").getAsInt() != 200) {
                                     SPUtils.put(context, KEY_STAGE, STAGE_IDLE);
                                     for (Listener listener : listeners) {
-                                        listener.onQueryFailure(new Exception("can not parse response to object: " + response + ", code=" + code));
+                                        listener.onQueryFailure(new Exception("statusCode is " + jsonObject.get("statusCode").getAsInt() + ", response=" + response));
                                     }
                                     return;
                                 }
-                                int resCode = patchInfo.getCode();
-                                if (resCode != 200) {
+                                JsonElement data = jsonObject.get("data");
+                                if (!data.isJsonPrimitive()) {
                                     SPUtils.put(context, KEY_STAGE, STAGE_IDLE);
                                     for (Listener listener : listeners) {
-                                        listener.onQueryFailure(new Exception("code=" + resCode));
+                                        listener.onQueryFailure(new Exception("返回的data数据格式有误，不是JsonPrimitive类型"));
                                     }
                                     return;
                                 }
+                                data = new JsonParser().parse(data.getAsJsonPrimitive().getAsString());
+                                if (data.isJsonNull()) {
+                                    SPUtils.put(context, KEY_STAGE, STAGE_IDLE);
+                                    for (Listener listener : listeners) {
+                                        listener.onQueryFailure(new Exception("不存在满足条件的补丁文件"));
+                                    }
+                                    return;
+                                }
+                                PatchInfo patchInfo = PatchUtils.toPatchInfo(data.getAsJsonObject());
                                 for (Listener listener : listeners) {
                                     listener.onQuerySuccess(patchInfo.toString());
-                                }
-                                if (patchInfo.getData() == null) {
-                                    File versionDir = new File(versionDirPath);
-                                    if (versionDir.exists()) {
-                                        versionDir.delete();
-                                    }
-                                    SPUtils.put(context, KEY_STAGE, STAGE_IDLE);
-                                    actualManager.cleanPatch(context);
-                                    return;
                                 }
                                 String newPatchPath = getPatchPath(patchInfo.getData());
                                 if (TextUtils.equals(loadedPatchPath, newPatchPath)) {

@@ -41,8 +41,6 @@ public class PatchInfo {
         private String downloadUrl;
         private long patchSize;
         private String hash;
-        private String hashJiagu;
-        private String downloadUrlJiagu;
 
         public String getVersionName() {
             return versionName;
@@ -84,25 +82,9 @@ public class PatchInfo {
             this.hash = hash;
         }
 
-        public String getHashJiagu() {
-            return hashJiagu;
-        }
-
-        public void setHashJiagu(String hashJiagu) {
-            this.hashJiagu = hashJiagu;
-        }
-
-        public String getDownloadUrlJiagu() {
-            return downloadUrlJiagu;
-        }
-
-        public void setDownloadUrlJiagu(String downloadUrlJiagu) {
-            this.downloadUrlJiagu = downloadUrlJiagu;
-        }
-
         @Override
         public String toString() {
-            return "{patchVersion:" + patchVersion + ", patchSize:" + patchSize + ", downloadUrl:" + downloadUrl + ", hash:" + hash + ", downloadUrlJiagu:" + downloadUrlJiagu + ", hashJiagu:" + hashJiagu + ", id:" + id + "}";
+            return "{patchVersion:" + patchVersion + ", patchSize:" + patchSize + ", downloadUrl:" + downloadUrl + ", hash:" + hash + ", id:" + id + "}";
         }
 
         public String getId() {

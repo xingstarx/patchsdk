@@ -9,9 +9,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.dx168.patchsdk.bean.PatchInfo;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.gson.JsonObject;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -188,30 +186,18 @@ public class PatchUtils {
         return "";
     }
 
-    public static PatchInfo toPatchInfo(String string) {
-        try {
-            JSONObject jsonObject = new JSONObject(string);
-            PatchInfo patchInfo = new PatchInfo();
-            patchInfo.setCode(jsonObject.optInt("code"));
-            patchInfo.setMessage(jsonObject.optString("message"));
-            JSONObject dataJSONObject = jsonObject.optJSONObject("data");
-            if (dataJSONObject != null) {
-                PatchInfo.Data data = new PatchInfo.Data();
-                data.setVersionName(dataJSONObject.optString("versionName"));
-                data.setId(dataJSONObject.optString("id"));
-                data.setPatchVersion(dataJSONObject.optString("patchVersion"));
-                data.setDownloadUrl(dataJSONObject.optString("downloadUrl"));
-                data.setPatchSize(dataJSONObject.optLong("patchSize"));
-                data.setHash(dataJSONObject.optString("hash"));
-                data.setHashJiagu(dataJSONObject.optString("hashJiagu"));
-                data.setDownloadUrlJiagu(dataJSONObject.optString("downloadUrlJiagu"));
-                patchInfo.setData(data);
-            }
-            return patchInfo;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static PatchInfo toPatchInfo(JsonObject jsonObject) {
+        PatchInfo patchInfo = new PatchInfo();
+        patchInfo.setCode(200);
+        PatchInfo.Data data = new PatchInfo.Data();
+        data.setVersionName(jsonObject.get("versionName").getAsString());
+        data.setId(jsonObject.get("id").getAsString());
+        data.setPatchVersion(jsonObject.get("patchVersion").getAsString());
+        data.setDownloadUrl(jsonObject.get("downloadUrl").getAsString());
+        data.setPatchSize(jsonObject.get("patchSize").getAsLong());
+        data.setHash(jsonObject.get("hash").getAsString());
+        patchInfo.setData(data);
+        return patchInfo;
     }
 
     public static boolean isMainProcessRunning(Context context) {
