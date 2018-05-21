@@ -208,18 +208,17 @@ public final class PatchManager {
                                     return;
                                 }
                                 JsonElement data = jsonObject.get("data");
-                                if (!data.isJsonPrimitive()) {
-                                    SPUtils.put(context, KEY_STAGE, STAGE_IDLE);
-                                    for (Listener listener : listeners) {
-                                        listener.onQueryFailure(new Exception("返回的data数据格式有误，不是JsonPrimitive类型"));
-                                    }
-                                    return;
-                                }
-                                data = new JsonParser().parse(data.getAsJsonPrimitive().getAsString());
-                                if (data.isJsonNull()) {
+                                if (data == null) {
                                     SPUtils.put(context, KEY_STAGE, STAGE_IDLE);
                                     for (Listener listener : listeners) {
                                         listener.onQueryFailure(new Exception("不存在满足条件的补丁文件"));
+                                    }
+                                    return;
+                                }
+                                if (!data.isJsonObject()) {
+                                    SPUtils.put(context, KEY_STAGE, STAGE_IDLE);
+                                    for (Listener listener : listeners) {
+                                        listener.onQueryFailure(new Exception("返回的data数据格式有误，不是JsonObject类型"));
                                     }
                                     return;
                                 }
